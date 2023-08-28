@@ -6,21 +6,23 @@ import { ITask } from "./Interfaces";
 const App: FC = () => {
   const [task, setTask] = useState<string>("");
   const [deadline, setDealine] = useState<number>(0);
-  const [todoList, setTodoList] = useState<ITask[]>([]);
+  const [todoList, setTodoList] = useState<ITask[]>(JSON.parse(localStorage.getItem('items') || '[]'));
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if (event.target.name === "task") {
       setTask(event.target.value);
     } else {
-      setDealine(Number(event.target.value));
+      setDealine(new Date(event.target.value).getTime());
     }
   };
 
   const addTask = (): void => {
     const newTask = { taskName: task, deadline: deadline };
-    setTodoList([...todoList, newTask]);
+    const newToDoList = [...todoList, newTask];
+    setTodoList(newToDoList);
     setTask("");
-    setDealine(0);
+    localStorage.setItem('items', JSON.stringify(newToDoList));
+    setDealine(new Date().getTime());
   };
 
   const completeTask = (taskNameToDelete: string): void => {
@@ -37,20 +39,19 @@ const App: FC = () => {
         <div className="inputContainer">
           <input
             type="text"
-            placeholder="Task..."
+            placeholder="Item..."
             name="task"
             value={task}
             onChange={handleChange}
           />
           <input
-            type="number"
-            placeholder="Deadline (in Days)..."
+            type="date"
             name="deadline"
-            value={deadline}
+            // value={deadline}
             onChange={handleChange}
           />
         </div>
-        <button onClick={addTask}>Add Task</button>
+        <button onClick={addTask}>Add</button>
       </div>
       <div className="todoList">
         {todoList.map((task: ITask, key: number) => {
