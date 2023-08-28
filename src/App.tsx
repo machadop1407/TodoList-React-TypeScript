@@ -6,7 +6,9 @@ import { ITask } from "./Interfaces";
 const App: FC = () => {
   const [task, setTask] = useState<string>("");
   const [deadline, setDealine] = useState<number>(0);
-  const [todoList, setTodoList] = useState<ITask[]>(JSON.parse(localStorage.getItem('items') || '[]'));
+  const [todoList, setTodoList] = useState<ITask[]>(
+    JSON.parse(localStorage.getItem("items") || "[]")
+  );
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     if (event.target.name === "task") {
@@ -21,16 +23,16 @@ const App: FC = () => {
     const newToDoList = [...todoList, newTask];
     setTodoList(newToDoList);
     setTask("");
-    localStorage.setItem('items', JSON.stringify(newToDoList));
+    localStorage.setItem("items", JSON.stringify(newToDoList));
     setDealine(new Date().getTime());
   };
 
   const completeTask = (taskNameToDelete: string): void => {
-    setTodoList(
-      todoList.filter((task) => {
-        return task.taskName != taskNameToDelete;
-      })
-    );
+    const newTasks = todoList.filter((task) => {
+      return task.taskName != taskNameToDelete;
+    });
+    setTodoList(newTasks);
+    localStorage.setItem("items", JSON.stringify(newTasks));
   };
 
   return (
