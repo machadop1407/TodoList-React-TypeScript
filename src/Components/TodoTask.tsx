@@ -10,7 +10,7 @@ const calculateDays = (date: number): number => {
   if (!date) {
     return 0;
   }
-  return Math.ceil((new Date().getTime() - date) / (1000 * 60 * 60 * 24));
+  return Math.round((new Date().getTime() - date) / (1000 * 60 * 60 * 24));
 };
 
 const TodoTask = ({ task, completeTask }: Props) => {
